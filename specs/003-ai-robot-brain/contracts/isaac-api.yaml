@@ -1,0 +1,181 @@
+# API Contract: NVIDIA Isaac Services
+
+## Overview
+This API provides access to NVIDIA Isaac services for educational purposes. It supports simulation, perception, and navigation capabilities for humanoid robots using Isaac Sim and Isaac ROS.
+
+## Base URL
+```
+https://api.isaac-robot.example.com/v1
+```
+
+## Endpoints
+
+### POST /simulation/isaac-sim/launch
+Launch an Isaac Sim environment with photorealistic rendering
+
+**Request Body:**
+```json
+{
+  "scene_name": "warehouse_01",
+  "robot_model": "humanoid_robot",
+  "render_quality": "ultra",
+  "physics_config": {
+    "gravity": [0, 0, -9.81],
+    "solver_iterations": 10
+  },
+  "lighting": {
+    "enable_global_illumination": true,
+    "dynamic_lights": true
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "simulation_id": "sim-98765",
+  "status": "running",
+  "connection_info": {
+    "render_port": 8211,
+    "physics_port": 8212,
+    "ros_bridge_port": 8213
+  }
+}
+```
+
+### POST /perception/isaac-ros/process
+Process sensor data using Isaac ROS perception pipelines
+
+**Request Body:**
+```json
+{
+  "pipeline_name": "stereo_vslam",
+  "sensor_data": {
+    "left_camera": "base64_encoded_image",
+    "right_camera": "base64_encoded_image",
+    "imu_data": {
+      "linear_acceleration": [0.1, 0.2, 9.8],
+      "angular_velocity": [0.01, 0.02, 0.03]
+    }
+  },
+  "processing_config": {
+    "enable_rectification": true,
+    "feature_detector": "sift",
+    "max_features": 2000
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "results": {
+    "pose_estimate": {
+      "position": [1.5, 2.0, 0.0],
+      "orientation": [0.0, 0.0, 0.1, 0.995]
+    },
+    "point_cloud": {
+      "count": 15000,
+      "confidence": 0.85
+    },
+    "processing_time_ms": 45
+  }
+}
+```
+
+### POST /navigation/nav2/configure
+Configure Nav2 navigation stack for humanoid robot
+
+**Request Body:**
+```json
+{
+  "robot_config": {
+    "type": "bipedal_humanoid",
+    "footprint": {
+      "length": 0.3,
+      "width": 0.2,
+      "height": 1.6
+    },
+    "kinematics": {
+      "step_height": 0.15,
+      "max_step_length": 0.4
+    }
+  },
+  "navigation_config": {
+    "global_planner": "navfn",
+    "local_planner": "dwb",
+    "costmap_resolution": 0.05,
+    "footprint_padding": 0.1
+  },
+  "safety_config": {
+    "min_obstacle_distance": 0.5,
+    "max_velocity": 0.5,
+    "acceleration_limit": 0.5
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "configuration_id": "nav-config-12345",
+  "ready_for_navigation": true
+}
+```
+
+### POST /navigation/nav2/plan
+Request a path plan from Nav2
+
+**Request Body:**
+```json
+{
+  "start_pose": {
+    "position": [0.0, 0.0, 0.0],
+    "orientation": [0.0, 0.0, 0.0, 1.0]
+  },
+  "goal_pose": {
+    "position": [5.0, 3.0, 0.0],
+    "orientation": [0.0, 0.0, 0.707, 0.707]
+  },
+  "map_id": "warehouse_map_01",
+  "planning_options": {
+    "use_astar": true,
+    "smooth_path": true,
+    "avoid_obstacles": true
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "path": [
+    {"position": [0.0, 0.0, 0.0], "orientation": [0.0, 0.0, 0.0, 1.0]},
+    {"position": [1.0, 0.5, 0.0], "orientation": [0.0, 0.0, 0.0, 1.0]},
+    {"position": [2.0, 1.0, 0.0], "orientation": [0.0, 0.0, 0.0, 1.0]},
+    // ... more waypoints
+    {"position": [5.0, 3.0, 0.0], "orientation": [0.0, 0.0, 0.707, 0.707]}
+  ],
+  "planning_time_ms": 120,
+  "path_length_m": 6.2
+}
+```
+
+## Error Responses
+All error responses follow this format:
+```json
+{
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human-readable error message",
+    "details": "Optional additional details"
+  }
+}
+```
+
+## Authentication
+All endpoints require authentication via Bearer token in the Authorization header.
+
+## Rate Limiting
+API requests are limited to 100 requests per minute per IP address.

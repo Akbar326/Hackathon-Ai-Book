@@ -4,11 +4,5 @@
   "link": {
     "type": "generated-index",
     "description": "Learn about physics simulation and environment modeling for humanoid robots using Gazebo and Unity."
-  },
-  "items": [
-    "module-2/gazebo-simulation",
-    "module-2/unity-rendering",
-    "module-2/sensors-simulation",
-    "module-2/summary"
-  ]
+  }
 }

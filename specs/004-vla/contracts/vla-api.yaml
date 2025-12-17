@@ -1,0 +1,215 @@
+# API Contract: Vision-Language-Action Services
+
+## Overview
+This API provides access to Vision-Language-Action services for educational purposes. It supports voice processing, language understanding, and action planning for humanoid robots.
+
+## Base URL
+```
+https://api.vla.example.com/v1
+```
+
+## Endpoints
+
+### POST /speech/transcribe
+Transcribe speech to text using OpenAI Whisper
+
+**Request Body:**
+```json
+{
+  "audio_data": "base64_encoded_audio",
+  "audio_format": "mp3",
+  "language": "en",
+  "timestamps": true
+}
+```
+
+**Response:**
+```json
+{
+  "transcription": "The transcribed text",
+  "confidence": 0.95,
+  "timestamps": [
+    {"start": 0.5, "end": 1.2, "text": "Hello"},
+    {"start": 1.3, "end": 2.1, "text": "world"}
+  ],
+  "processing_time_ms": 250
+}
+```
+
+### POST /nlp/intent-classify
+Classify natural language intent from transcribed speech
+
+**Request Body:**
+```json
+{
+  "text": "Move the red box to the left corner",
+  "context": {
+    "robot_type": "humanoid",
+    "available_actions": ["move", "grasp", "navigate", "inspect"],
+    "environment": "indoor_lab"
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "intent": {
+    "action": "move_object",
+    "object": {
+      "name": "red_box",
+      "color": "red",
+      "type": "box"
+    },
+    "destination": {
+      "location": "left_corner",
+      "coordinates": [0.5, -1.2, 0.0]
+    }
+  },
+  "confidence": 0.87,
+  "entities": [
+    {"type": "object", "value": "red box", "confidence": 0.92},
+    {"type": "location", "value": "left corner", "confidence": 0.85}
+  ]
+}
+```
+
+### POST /planning/generate
+Generate action plan from classified intent
+
+**Request Body:**
+```json
+{
+  "intent": {
+    "action": "move_object",
+    "object": {
+      "name": "red_box",
+      "color": "red",
+      "type": "box"
+    },
+    "destination": {
+      "location": "left_corner",
+      "coordinates": [0.5, -1.2, 0.0]
+    }
+  },
+  "robot_capabilities": {
+    "manipulation": true,
+    "navigation": true,
+    "perception": true,
+    "max_payload_kg": 5.0
+  },
+  "environment_state": {
+    "objects": [
+      {"name": "red_box", "position": [1.0, 0.5, 0.0], "properties": {"color": "red", "type": "box"}},
+      {"name": "blue_cylinder", "position": [0.8, -0.2, 0.0], "properties": {"color": "blue", "type": "cylinder"}}
+    ],
+    "obstacles": [
+      {"position": [0.0, 0.0, 0.0], "size": [0.3, 0.3, 1.0]}
+    ]
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "action_sequence": [
+    {
+      "action": "navigate",
+      "target": {"position": [1.0, 0.5, 0.0]},
+      "description": "Move to the red box location"
+    },
+    {
+      "action": "identify_object",
+      "target": {"name": "red_box"},
+      "description": "Verify the red box is at expected location"
+    },
+    {
+      "action": "grasp",
+      "target": {"name": "red_box"},
+      "description": "Grasp the red box with appropriate grip"
+    },
+    {
+      "action": "navigate",
+      "target": {"position": [0.5, -1.2, 0.0]},
+      "description": "Move to the left corner destination"
+    },
+    {
+      "action": "place",
+      "target": {"position": [0.5, -1.2, 0.0]},
+      "description": "Place the red box at the destination"
+    }
+  ],
+  "estimated_duration_sec": 120,
+  "safety_checks": ["payload_limit", "collision_avoidance", "workspace_boundaries"]
+}
+```
+
+### POST /execution/execute
+Execute an action sequence on a humanoid robot
+
+**Request Body:**
+```json
+{
+  "action_sequence": [
+    {
+      "action": "navigate",
+      "target": {"position": [1.0, 0.5, 0.0]},
+      "description": "Move to the red box location"
+    }
+  ],
+  "robot_id": "humanoid_robot_01",
+  "execution_options": {
+    "real_robot": false,
+    "simulation_environment": "gazebo_indoor_lab"
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "execution_id": "exec-12345",
+  "status": "executing",
+  "estimated_completion_time": "2025-12-17T10:35:00Z",
+  "feedback_stream": "ws://api.vla.example.com/v1/execution/exec-12345/feedback"
+}
+```
+
+### GET /execution/{execution_id}/status
+Get status of an ongoing execution
+
+**Path Parameters:**
+- `execution_id`: Execution identifier
+
+**Response:**
+```json
+{
+  "status": "completed",
+  "current_action_index": 2,
+  "completed_actions": ["navigate", "identify_object"],
+  "current_action": "grasping",
+  "progress_percentage": 60.0,
+  "estimated_remaining_time_sec": 45,
+  "safety_violations": [],
+  "errors": []
+}
+```
+
+## Error Responses
+All error responses follow this format:
+```json
+{
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human-readable error message",
+    "details": "Optional additional details"
+  }
+}
+```
+
+## Authentication
+All endpoints require authentication via Bearer token in the Authorization header.
+
+## Rate Limiting
+API requests are limited to 100 requests per minute per IP address.

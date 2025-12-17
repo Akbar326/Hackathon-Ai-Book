@@ -23,6 +23,25 @@ const sidebars = {
         'module-2/summary'
       ],
     },
+    {
+      type: 'category',
+      label: 'Module 3 - The AI-Robot Brain',
+      items: [
+        'module-3/isaac-sim',
+        'module-3/isaac-ros',
+        'module-3/nav2-navigation',
+        'module-3/summary'
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Module 4 - Vision-Language-Action',
+      items: [
+        'module-4/voice-to-action',
+        'module-4/language-planning',
+        'module-4/capstone-autonomous-humanoid'
+      ],
+    },
   ],
 };
 
