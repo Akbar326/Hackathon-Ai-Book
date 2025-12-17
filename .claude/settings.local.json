@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git fetch --all --prune)",
+      "Bash(pwsh -Command \".specify/scripts/powershell/create-new-feature.ps1 -Json ''Module: Module 1 – The Robotic Nervous System (ROS 2)\n\nAudience:\n- Students with basic Python and AI knowledge\n- Targeted at Physical AI & Humanoid Robotics learners\n\nPurpose:\n- Introduce ROS 2 as the middleware nervous system for humanoid robots\n- Enable students to understand and reason about robot communication, control flow, and embodiment\n\nChapters (Docusaurus Structure):\n\nChapter 1: Introduction to ROS 2 for Physical AI\n- What ROS 2 is and why it is essential for Physical AI\n- ROS 2 architecture and middleware concepts\n- Role of ROS 2 in humanoid robot control\n- Relationship between AI agents and robotic systems\n\nChapter 2: ROS 2 Communication Primitives\n- ROS 2 Nodes and executors\n- Topics, Publishers, and Subscribers\n- Services and Actions (conceptual overview)\n- Data flow between perception, planning, and control layers\n\nChapter 3: From AI Agents to Robot Bodies\n- Bridging Python AI agents with ROS 2 using rclpy\n- High-level control vs low-level motor commands\n- Introduction to URDF for humanoid robots\n- How robot structure enables physical embodiment'' -ShortName ''ros2-module'' -Number 1\")",
+      "Bash(git rev-parse --git-dir)",
+      "Bash(npx create-docusaurus@latest frontend-book classic --typescript=false --package-manager=npm)",
+      "Bash(npx create-docusaurus@latest website classic)"
+    ]
+  }
+}
