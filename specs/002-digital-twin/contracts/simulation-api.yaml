@@ -1,0 +1,153 @@
+# API Contract: Digital Twin Simulation Service
+
+## Overview
+This API provides access to digital twin simulation capabilities for educational purposes. It supports physics simulation, rendering controls, and sensor simulation for humanoid robots in virtual environments.
+
+## Base URL
+```
+https://api.digital-twin.example.com/v1
+```
+
+## Endpoints
+
+### POST /simulation/gazebo/launch
+Launch a Gazebo simulation environment
+
+**Request Body:**
+```json
+{
+  "world_file": "path/to/world/file.world",
+  "robot_model": "humanoid_robot_model",
+  "physics_config": {
+    "gravity": [0, 0, -9.81],
+    "real_time_factor": 1.0
+  },
+  "plugins": ["libgazebo_ros_joint_state_publisher.so"]
+}
+```
+
+**Response:**
+```json
+{
+  "simulation_id": "sim-12345",
+  "status": "running",
+  "connection_info": {
+    "ros_bridge_port": 9090,
+    "gazebo_port": 11345
+  }
+}
+```
+
+### POST /simulation/unity/launch
+Launch a Unity-based rendering environment
+
+**Request Body:**
+```json
+{
+  "scene_name": "humanoid_robot_scene",
+  "render_quality": "high",
+  "robot_model": "humanoid_robot_model",
+  "environment_settings": {
+    "lighting": "realistic",
+    "shadows": true
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "rendering_id": "render-67890",
+  "status": "running",
+  "connection_info": {
+    "render_port": 8080,
+    "stream_url": "ws://localhost:8080/stream"
+  }
+}
+```
+
+### GET /sensors/{simulation_id}/data
+Retrieve simulated sensor data
+
+**Path Parameters:**
+- `simulation_id`: Simulation identifier
+
+**Query Parameters:**
+- `sensor_type`: Type of sensor data to retrieve (lidar, depth_camera, imu)
+- `timestamp` (optional): Specific timestamp for data retrieval
+
+**Response:**
+```json
+{
+  "sensor_data": {
+    "type": "lidar",
+    "timestamp": "2025-12-17T10:30:00Z",
+    "data": [
+      // Sensor data points
+    ],
+    "metadata": {
+      "frame_id": "laser_frame",
+      "sensor_position": [0.5, 0.0, 1.2]
+    }
+  }
+}
+```
+
+### POST /sensors/simulate
+Configure and run sensor simulation
+
+**Request Body:**
+```json
+{
+  "simulation_id": "sim-12345",
+  "sensors": [
+    {
+      "type": "lidar",
+      "name": "front_lidar",
+      "position": [0.5, 0.0, 1.2],
+      "parameters": {
+        "range_min": 0.1,
+        "range_max": 30.0,
+        "angle_min": -2.36,
+        "angle_max": 2.36,
+        "resolution": 0.01
+      }
+    },
+    {
+      "type": "imu",
+      "name": "imu_sensor",
+      "position": [0.0, 0.0, 0.8],
+      "parameters": {
+        "rate": 100,
+        "noise": 0.01
+      }
+    }
+  ]
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "configured_sensors": ["front_lidar", "imu_sensor"]
+}
+```
+
+## Error Responses
+All error responses follow this format:
+```json
+{
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human-readable error message",
+    "details": "Optional additional details"
+  }
+}
+```
+
+## Authentication
+All endpoints require authentication via Bearer token in the Authorization header.
+
+## Rate Limiting
+API requests are limited to 50 requests per minute per IP address.
