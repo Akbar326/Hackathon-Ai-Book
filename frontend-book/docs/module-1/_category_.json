@@ -5,10 +5,5 @@
     "type": "generated-index",
     "description": "Learn about ROS 2 as the middleware nervous system for humanoid robots."
   },
-  "items": [
-    "module-1/intro",
-    "module-1/ros2-communication",
-    "module-1/ai-to-robot-bridge",
-    "module-1/summary"
-  ]
+  
 }
