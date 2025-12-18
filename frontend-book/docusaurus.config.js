@@ -85,7 +85,7 @@ const config = {
             items: [
               {
                 label: 'Text Book',
-                to: '/docs/intro',
+                to: '/docs/module-1/intro',
               },
             ],
           },
