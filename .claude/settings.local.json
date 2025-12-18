@@ -7,7 +7,11 @@
       "Bash(npx create-docusaurus@latest frontend-book classic --typescript=false --package-manager=npm)",
       "Bash(npx create-docusaurus@latest website classic)",
       "Bash(npx docusaurus start)",
-      "Bash(npx docusaurus start --port 3001)"
+      "Bash(npx docusaurus start --port 3001)",
+      "Bash(git checkout -b 005-docusaurus-site-branding)",
+      "Bash(mkdir -p specs/005-docusaurus-site-branding)",
+      "Bash(.specify/scripts/powershell/setup-plan.ps1 -Json)",
+      "Bash(curl -I http://localhost:3000)"
     ]
   }
 }
