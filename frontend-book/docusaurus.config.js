@@ -5,8 +5,8 @@
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'ROS 2 Module - The Robotic Nervous System',
-  tagline: 'Educational content for Physical AI & Humanoid Robotics learners',
+  title: 'Physical AI & Humanoid Robotics',
+  tagline: 'Embodied Intelligence and Physical AI Systems',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -63,9 +63,9 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: 'ROS 2 Educational Module',
+        title: 'Physical AI & Humanoid Robotics',
         logo: {
-          alt: 'ROS 2 Logo',
+          alt: 'Physical AI & Humanoid Robotics Logo',
           src: 'img/logo.svg',
         },
         items: [
@@ -73,13 +73,7 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
-            label: 'Tutorial',
-          },
-          {to: '/blog', label: 'Blog', position: 'left'},
-          {
-            href: 'https://github.com/facebook/docusaurus',
-            label: 'GitHub',
-            position: 'right',
+            label: 'Text Book',
           },
         ],
       },
@@ -90,7 +84,7 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Tutorial',
+                label: 'Text Book',
                 to: '/docs/intro',
               },
             ],
@@ -115,14 +109,6 @@ const config = {
           {
             title: 'More',
             items: [
-              {
-                label: 'Blog',
-                to: '/blog',
-              },
-              {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
-              },
             ],
           },
         ],
